@@ -19,55 +19,37 @@ class NoteViewModel(private val repository: NoteRepository) : BaseViewModel() {
         getNotes()
     }
 
-    private fun getNotes() {
-        viewModelScope.launch {
-            repository.getNotes().onStart {
-                _onIsLoadingState.value = true
-            }.catch {
-                _onShowMessageState.value = it.localizedMessage ?: errorPlaceHolder
-            }.collect {
-                _onNoteListResponse.value = it
+    override fun onCollectFlow(operationTag: String, resultData: Any?) {
+        when(operationTag) {
+            "getNotes"-> {
+                _onNoteListResponse.value = resultData as List<NoteResponse?>?
+            }
+            "addNote"-> {
+                getNotes()
+            }
+            "updateNote"-> {
+                getNotes()
+            }
+            ""-> {
+                getNotes()
             }
         }
+    }
+
+    private fun getNotes() {
+        executedSuspendedFlow("getNotes"){ repository.getNotes() }
     }
 
     fun addNote(note: Note) {
-        viewModelScope.launch {
-            repository.addNote(note = note).onStart {
-                _onIsLoadingState.value = true
-            }.catch {
-                _onShowMessageState.value = it.localizedMessage ?: errorPlaceHolder
-            }.collect {
-                getNotes()
-                _onShowMessageState.value = "Note Added"
-            }
-        }
+        executedSuspendedFlow("addNote"){ repository.addNote(note) }
     }
 
     fun updateNote(id: Int, note: Note) {
-        viewModelScope.launch {
-            repository.updateNote(id = id, note = note).onStart {
-                _onIsLoadingState.value = true
-            }.catch {
-                _onShowMessageState.value = it.localizedMessage ?: errorPlaceHolder
-            }.collect {
-                getNotes()
-                _onShowMessageState.value = "Note Updated"
-            }
-        }
+        executedSuspendedFlow("updateNote") { repository.updateNote(id = id, note = note)}
     }
 
     fun deleteNote(id: Int) {
-        viewModelScope.launch {
-            repository.deleteNote(id = id).onStart {
-                _onIsLoadingState.value = true
-            }.catch {
-                _onShowMessageState.value = it.localizedMessage ?: errorPlaceHolder
-            }.collect {
-                getNotes()
-                _onShowMessageState.value = "Note Deleted"
-            }
-        }
+        executedSuspendedFlow("deleteNote") { repository.deleteNote(id = id) }
     }
 }
 
