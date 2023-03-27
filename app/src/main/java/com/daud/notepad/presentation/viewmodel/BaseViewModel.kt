@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
@@ -27,12 +26,12 @@ abstract class BaseViewModel : ViewModel() {
             }?.catch {
               _onShowMessageState.value = it.localizedMessage ?: "Something went wrong"
             }?.collect {
-                onCollectFlow(operationTag,it)
+                onSuccessCollectFlow(operationTag,it)
             }
         }
     }
 
-    protected abstract fun onCollectFlow(
+    protected abstract fun onSuccessCollectFlow(
         operationTag: String,
         resultData: Any?
     )
