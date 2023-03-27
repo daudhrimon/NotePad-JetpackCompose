@@ -17,7 +17,7 @@ class NoteViewModel(private val repository: NoteRepository) : BaseViewModel() {
         attemptGetNotes()
     }
 
-    override fun onSuccessCollectFlow(operationTag: String, resultData: Any?) {
+    override fun onSuccessCollectFlow(operationTag: String, resultData: Any) {
         when(operationTag) {
             OperationTags.GetNotes.TAG-> {
                 _onNoteListResponse.value = resultData as List<NoteResponse?>?
@@ -38,19 +38,19 @@ class NoteViewModel(private val repository: NoteRepository) : BaseViewModel() {
     }
 
     private fun attemptGetNotes() {
-        executedSuspendedFlow(OperationTags.GetNotes.TAG){ repository.getNotes() }
+        executeSuspendedFlow(OperationTags.GetNotes.TAG){ repository.getNotes() }
     }
 
     fun attemptAddNote(note: Note) {
-        executedSuspendedFlow(OperationTags.AddNote.TAG){ repository.addNote(note) }
+        executeSuspendedFlow(OperationTags.AddNote.TAG){ repository.addNote(note) }
     }
 
     fun attemptUpdateNote(id: Int, note: Note) {
-        executedSuspendedFlow(OperationTags.UpdateNote.TAG) { repository.updateNote(id = id, note = note)}
+        executeSuspendedFlow(OperationTags.UpdateNote.TAG) { repository.updateNote(id = id, note = note)}
     }
 
     fun attemptDeleteNote(id: Int) {
-        executedSuspendedFlow(OperationTags.DeleteNote.TAG) { repository.deleteNote(id = id) }
+        executeSuspendedFlow(OperationTags.DeleteNote.TAG) { repository.deleteNote(id = id) }
     }
 }
 

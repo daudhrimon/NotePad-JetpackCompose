@@ -12,6 +12,7 @@ import com.daud.notepad.data.network.ApiService
 import com.daud.notepad.data.repository.NoteRepository
 import com.daud.notepad.presentation.viewmodel.NoteViewModel
 import com.daud.notepad.presentation.viewmodel.NoteViewModelFactory
+import com.daud.notepad.utils.showToast
 
 @Composable
 fun DashboardScreen(
@@ -26,16 +27,16 @@ fun DashboardScreen(
 ) {
     viewModel.onIsLoadingState.value.let {
         if (it) {
-            Toast.makeText(navHostController.context, "Loading", Toast.LENGTH_SHORT).show()
+            navHostController.context.showToast("Loading")
         }
     }
     viewModel.onShowMessageState.value.let {
         if (it.isNotEmpty()) {
-            Toast.makeText(navHostController.context, it, Toast.LENGTH_SHORT).show()
-            Log.wtf("Message", it)
+            navHostController.context.showToast(it)
         }
     }
-    viewModel.onNoteListResponse.value.let {
+    viewModel.onNoteListResponse.value?.let {
+        navHostController.context.showToast(it.toString())
         Log.wtf("NOTES", it.toString())
     }
 }
