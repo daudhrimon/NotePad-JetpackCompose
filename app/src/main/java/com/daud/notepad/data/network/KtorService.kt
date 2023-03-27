@@ -10,9 +10,9 @@ import io.ktor.http.*
 import io.ktor.util.*
 
 class KtorService(
-    private val httpClient: HttpClient,
-    private val baseUrl: String = BuildConfig.BASE_URL
+    private val httpClient: HttpClient
 ) {
+    private val baseUrl: String = BuildConfig.BASE_URL
     suspend fun getNotes(): List<NoteResponse> {
         return httpClient.get {
             url(baseUrl + "todo")

@@ -6,22 +6,22 @@ import retrofit2.http.*
 
 interface ApiService {
 
-    @GET("todo")
-    suspend fun getNotes(): List<NoteResponse>
+    @GET("todo/")
+    suspend fun getNotes(): List<NoteResponse?>?
 
     @POST("todo/")
     suspend fun addNotes(
         @Body note: Note
-    ): NoteResponse
+    ): NoteResponse?
 
     @PUT("todo/{id}/")
     suspend fun updateNote(
         @Path("id") id: Int,
         @Body note: Note
-    ): NoteResponse
+    ): NoteResponse?
 
     @DELETE("todo/{id}/")
     suspend fun deleteNote(
         @Path("id") id: Int
-    ): NoteResponse
+    ): NoteResponse?
 }
