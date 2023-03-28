@@ -10,7 +10,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
-object RestApiService {
+object BaseApiService {
     private val loggingInterceptor: HttpLoggingInterceptor = if (BuildConfig.DEBUG) {
         val logger = HttpLoggingInterceptor()
         logger.setLevel(HttpLoggingInterceptor.Level.BODY)
