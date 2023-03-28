@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.daud.notepad.base.BaseScreen
+import com.daud.notepad.base.BaseEventHandler
 import com.daud.notepad.base.BaseApiService
 import com.daud.notepad.data.network.ApiService
 import com.daud.notepad.data.repository.NoteRepository
@@ -23,7 +23,7 @@ fun DashboardScreen(
             )
         )
     )
-) { BaseScreen(LocalContext.current, viewModel.onIsLoadingState, viewModel.onShowMessageState)
+) { BaseEventHandler(viewModel.onIsLoadingState, viewModel.onShowMessageState)
 
     viewModel.onNoteListResponse.value?.let {
 
