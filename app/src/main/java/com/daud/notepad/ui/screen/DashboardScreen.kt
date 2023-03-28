@@ -1,22 +1,27 @@
-package com.daud.notepad.presentation.screen
+package com.daud.notepad.ui.screen
 
+import android.content.Context
 import android.util.Log
-import android.widget.Toast
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.runtime.CompositionLocalContext
+import androidx.compose.runtime.currentCompositionLocalContext
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.daud.notepad.data.network.RestApiService
+import com.daud.notepad.base.RestApiService
 import com.daud.notepad.data.network.ApiService
 import com.daud.notepad.data.repository.NoteRepository
-import com.daud.notepad.presentation.viewmodel.NoteViewModel
-import com.daud.notepad.presentation.viewmodel.NoteViewModelFactory
+import com.daud.notepad.ui.theme.Red
+import com.daud.notepad.ui.viewmodel.NoteViewModel
+import com.daud.notepad.ui.viewmodel.NoteViewModelFactory
 import com.daud.notepad.utils.showToast
 
 @Composable
 fun DashboardScreen(
     navHostController: NavHostController,
+    context: Context = LocalContext.current,
     viewModel: NoteViewModel = viewModel(
         factory = NoteViewModelFactory(
             NoteRepository(
@@ -27,16 +32,19 @@ fun DashboardScreen(
 ) {
     viewModel.onIsLoadingState.value.let {
         if (it) {
-            navHostController.context.showToast("Loading")
+            Dialog(onDismissRequest = {}) {
+                CircularProgressIndicator(color = Red)
+            }
+            context.showToast("Loading")
         }
     }
     viewModel.onShowMessageState.value.let {
         if (it.isNotEmpty()) {
-            navHostController.context.showToast(it)
+            context.showToast(it)
         }
     }
     viewModel.onNoteListResponse.value?.let {
-        navHostController.context.showToast(it.toString())
+        context.showToast(it.toString())
         Log.wtf("NOTES", it.toString())
     }
 }

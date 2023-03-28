@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.daud.notepad.presentation.screen.DashboardScreen
-import com.daud.notepad.presentation.screen.NoteScreen
+import com.daud.notepad.ui.screen.DashboardScreen
+import com.daud.notepad.ui.screen.NoteScreen
 
 @Composable
 fun NavGraph(navHostController: NavHostController) {

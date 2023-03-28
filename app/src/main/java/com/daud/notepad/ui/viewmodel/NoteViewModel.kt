@@ -1,13 +1,14 @@
-package com.daud.notepad.presentation.viewmodel
+package com.daud.notepad.ui.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.daud.notepad.base.BaseViewModel
 import com.daud.notepad.data.model.Note
 import com.daud.notepad.data.model.NoteResponse
 import com.daud.notepad.data.repository.NoteRepository
-import com.daud.notepad.utils.OperationTags
+import com.daud.notepad.utils.OperationTag
 
 class NoteViewModel(private val repository: NoteRepository) : BaseViewModel() {
     private val _onNoteListResponse = mutableStateOf<List<NoteResponse?>?>(null)
@@ -17,40 +18,40 @@ class NoteViewModel(private val repository: NoteRepository) : BaseViewModel() {
         attemptGetNotes()
     }
 
-    override fun onSuccessCollectFlow(operationTag: String, resultData: Any) {
-        when(operationTag) {
-            OperationTags.GetNotes.TAG-> {
+    override fun onSuccessCollectFlow(operationTag: OperationTag, resultData: Any) {
+        when (operationTag) {
+            OperationTag.GetNotes -> {
                 _onNoteListResponse.value = resultData as List<NoteResponse?>?
             }
-            OperationTags.AddNote.TAG-> {
+            OperationTag.AddNote -> {
                 attemptGetNotes()
-                _onShowMessageState.value = OperationTags.AddNote.TAG
+                _onShowMessageState.value = "Note Added"
             }
-            OperationTags.UpdateNote.TAG-> {
+            OperationTag.UpdateNote -> {
                 attemptGetNotes()
-                _onShowMessageState.value = OperationTags.UpdateNote.TAG
+                _onShowMessageState.value = "Note Updated"
             }
-            OperationTags.DeleteNote.TAG-> {
+            OperationTag.DeleteNote -> {
                 attemptGetNotes()
-                _onShowMessageState.value = OperationTags.DeleteNote.TAG
+                _onShowMessageState.value = "Note Deleted"
             }
         }
     }
 
     private fun attemptGetNotes() {
-        executeSuspendedFlow(OperationTags.GetNotes.TAG){ repository.getNotes() }
+        executeSuspendedFlow(OperationTag.GetNotes) { repository.getNotes() }
     }
 
     fun attemptAddNote(note: Note) {
-        executeSuspendedFlow(OperationTags.AddNote.TAG){ repository.addNote(note) }
+        executeSuspendedFlow(OperationTag.AddNote) { repository.addNote(note) }
     }
 
     fun attemptUpdateNote(id: Int, note: Note) {
-        executeSuspendedFlow(OperationTags.UpdateNote.TAG) { repository.updateNote(id = id, note = note)}
+        executeSuspendedFlow(OperationTag.UpdateNote) { repository.updateNote(id = id, note = note) }
     }
 
     fun attemptDeleteNote(id: Int) {
-        executeSuspendedFlow(OperationTags.DeleteNote.TAG) { repository.deleteNote(id = id) }
+        executeSuspendedFlow(OperationTag.DeleteNote) { repository.deleteNote(id = id) }
     }
 }
 

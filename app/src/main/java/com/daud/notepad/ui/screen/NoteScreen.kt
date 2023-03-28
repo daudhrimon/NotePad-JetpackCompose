@@ -1,4 +1,4 @@
-package com.daud.notepad.presentation.screen
+package com.daud.notepad.ui.screen
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

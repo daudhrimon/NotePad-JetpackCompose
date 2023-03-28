@@ -1,4 +1,4 @@
-package com.daud.notepad.data.network
+package com.daud.notepad.base
 
 import com.daud.notepad.BuildConfig
 import com.squareup.moshi.Moshi
