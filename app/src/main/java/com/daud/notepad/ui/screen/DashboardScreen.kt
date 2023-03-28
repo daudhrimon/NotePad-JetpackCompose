@@ -30,12 +30,9 @@ fun DashboardScreen(
         )
     )
 ) {
-    viewModel.onIsLoadingState.value.let {
-        if (it) {
-            Dialog(onDismissRequest = {}) {
-                CircularProgressIndicator(color = Red)
-            }
-            context.showToast("Loading")
+    if (viewModel.onIsLoadingState.value) {
+        Dialog(onDismissRequest = {}) {
+            CircularProgressIndicator(color = Red)
         }
     }
     viewModel.onShowMessageState.value.let {
@@ -44,7 +41,6 @@ fun DashboardScreen(
         }
     }
     viewModel.onNoteListResponse.value?.let {
-        context.showToast(it.toString())
-        Log.wtf("NOTES", it.toString())
+
     }
 }
