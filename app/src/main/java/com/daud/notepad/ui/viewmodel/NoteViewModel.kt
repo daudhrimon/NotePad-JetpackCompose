@@ -22,7 +22,6 @@ class NoteViewModel(private val repository: NoteRepository) : BaseViewModel() {
         when (operationTag) {
             OperationTag.GetNotes -> {
                 _onNoteListResponse.value = resultData as List<NoteResponse?>?
-                _onShowMessageState.value = "Get Note Successful" // test
             }
             OperationTag.AddNote -> {
                 attemptGetNotes()
