@@ -11,14 +11,7 @@ import com.daud.notepad.ui.theme.NotePadComposeTheme
 import com.daud.notepad.utils.showToast
 
 class MainActivity : ComponentActivity(),BaseMessageEventListener {
-    private val baseMessageEventListener = { onShowMessageState: MutableState<String?> ->
-        onShowMessageState.value?.let {
-            if (it.isNotEmpty()) {
-                this.showToast(it)
-                onShowMessageState.value = null
-            }
-        }
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
