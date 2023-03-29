@@ -1,11 +1,9 @@
 package com.daud.notepad.ui.screen
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -13,10 +11,14 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -47,7 +49,8 @@ fun DashboardScreen(
             )
         )
     )
-) { baseEventListener.onBaseEvent(
+) {
+    baseEventListener.onBaseEvent(
         baseProgressLoader = BaseProgressLoader(viewModel.onIsLoadingState),
         onShowMessageState = viewModel.onShowMessageState
     )
@@ -77,37 +80,47 @@ fun DashboardScreen(
         ) {
             SearchBar(
                 searchValue = searchValue.value,
-                onSearchValueChange = {searchValue.value = it}
+                onSearchValueChange = { searchValue.value = it }
             )
 
-            viewModel.onNoteListResponse.value?.let { noteList->
-                val filterList = remember { mutableStateOf(listOf<NoteResponse?>()) }
-
-                filterList.value = if (searchValue.value.isNotEmpty()) {
-                    noteList.filter {
-                        searchValue.value.lowercase() == it?.title?.lowercase() || searchValue.value == it?.description?.lowercase()
+            viewModel.onNoteListResponse.value?.let { noteList ->
+                val filterList = remember { mutableStateOf(listOf<NoteResponse?>()) }.apply {
+                    this.value = if (searchValue.value.isNotEmpty()) {
+                        noteList.filter {
+                            it?.title?.lowercase().toString().contains(searchValue.value.lowercase()) ||
+                                    it?.description?.lowercase().toString().contains(searchValue.value.lowercase())
+                        }
+                    } else {
+                        noteList
                     }
-                } else {
-                    noteList
                 }
 
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(16.dp)
-                ) {
-                    items(items = filterList.value) {
-                        NoteEachRow(
-                            noteItem = it,
-                            onUpdateClickListener = {
-                            },
-                            onDeleteClickListener = {
-                                it?.id?.let { id -> viewModel.attemptDeleteNote(id) }
-                            }
-                        )
+                if (filterList.value.isNotEmpty()) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(16.dp)
+                    ) {
+                        items(items = filterList.value) {
+                            NoteEachRow(
+                                noteItem = it,
+                                onUpdateClickListener = {
+                                },
+                                onDeleteClickListener = {
+                                    it?.id?.let { id -> viewModel.attemptDeleteNote(id) }
+                                }
+                            )
+                        }
                     }
+                } else {
+                    Image(
+                        imageVector = Icons.Default.NoteAdd,
+                        modifier = Modifier.fillMaxSize().padding(100.dp),
+                        colorFilter = ColorFilter.tint(Red),
+                        contentDescription = ""
+                    )
                 }
             }
         }
