@@ -1,7 +1,6 @@
 package com.daud.notepad.ui.screen
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,13 +17,12 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.daud.notepad.base.BaseApiService
-import com.daud.notepad.base.BaseMessageEventListener
-import com.daud.notepad.base.BaseLoadingEventListener
+import com.daud.notepad.base.BaseEventListener
+import com.daud.notepad.base.BaseProgressLoader
 import com.daud.notepad.data.model.NoteResponse
 import com.daud.notepad.data.network.ApiService
 import com.daud.notepad.data.repository.NoteRepository
@@ -41,7 +39,7 @@ import java.util.*
 @Composable
 fun DashboardScreen(
     navHostController: NavHostController,
-    baseMessageEventListener: BaseMessageEventListener,
+    baseEventListener: BaseEventListener,
     viewModel: NoteViewModel = viewModel(
         factory = NoteViewModelFactory(
             NoteRepository(
@@ -49,8 +47,10 @@ fun DashboardScreen(
             )
         )
     )
-) { BaseLoadingEventListener(viewModel.onIsLoadingState)
-    baseMessageEventListener.onShowMessageEvent(viewModel.onShowMessageState)
+) { baseEventListener.onBaseEvent(
+        baseProgressLoader = BaseProgressLoader(viewModel.onIsLoadingState),
+        onShowMessageState = viewModel.onShowMessageState
+    )
 
     LaunchedEffect(key1 = true) {
         viewModel.attemptGetNotes()
