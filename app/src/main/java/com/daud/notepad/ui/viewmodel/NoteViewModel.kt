@@ -14,10 +14,6 @@ class NoteViewModel(private val repository: NoteRepository) : BaseViewModel() {
     private val _onNoteListResponse = mutableStateOf<List<NoteResponse?>?>(null)
     val onNoteListResponse: State<List<NoteResponse?>?> = _onNoteListResponse
 
-    init {
-        attemptGetNotes()
-    }
-
     override fun onSuccessCollectFlow(operationTag: OperationTag, resultData: Any) {
         when (operationTag) {
             OperationTag.GetNotes -> {
@@ -25,20 +21,20 @@ class NoteViewModel(private val repository: NoteRepository) : BaseViewModel() {
             }
             OperationTag.AddNote -> {
                 attemptGetNotes()
-                _onShowMessageState.value = "Note Added"
+                onShowMessageState.value = "Note Added"
             }
             OperationTag.UpdateNote -> {
                 attemptGetNotes()
-                _onShowMessageState.value = "Note Updated"
+                onShowMessageState.value = "Note Updated"
             }
             OperationTag.DeleteNote -> {
                 attemptGetNotes()
-                _onShowMessageState.value = "Note Deleted"
+                onShowMessageState.value = "Note Deleted"
             }
         }
     }
 
-    private fun attemptGetNotes() {
+    fun attemptGetNotes() {
         executeSuspendedFlow(OperationTag.GetNotes) { repository.getNotes() }
     }
 

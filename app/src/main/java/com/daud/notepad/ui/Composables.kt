@@ -71,16 +71,16 @@ fun SearchBar(
 
 @Composable
 fun NoteEachRow(
-    note: NoteResponse,
-    onUpdate: () -> Unit,
-    onDelete: () -> Unit
+    noteItem: NoteResponse?,
+    onUpdateClickListener: () -> Unit,
+    onDeleteClickListener: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
             .background(ContentBgColor)
-            .clickable { onUpdate() }
+            .clickable(onClick = { onUpdateClickListener() })
     ) {
         Column(
             modifier = Modifier.padding(10.dp)
@@ -89,29 +89,37 @@ fun NoteEachRow(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = note.title?:"", style = TextStyle(
+                    text = noteItem?.title ?: "",
+                    style = TextStyle(
                         color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.W600
-                    ), modifier = Modifier
+                    ),
+                    modifier = Modifier
                         .weight(0.7f)
                         .align(Alignment.CenterVertically)
                 )
-                IconButton(onClick = {
-                    onDelete()
-                }, modifier = Modifier.weight(0.3f)) {
+
+                IconButton(
+                    onClick = { noteItem?.id?.let { onDeleteClickListener.invoke() } },
+                    modifier = Modifier.weight(0.3f)
+                ) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "", tint = Red)
                 }
             }
+
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = note.description?:"", style = TextStyle(
+                text = noteItem?.description ?: "",
+                style = TextStyle(
                     color = Color.Black.copy(alpha = 0.6f),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal
                 )
             )
+
             Spacer(modifier = Modifier.height(5.dp))
             Text(
-                text = note.updated_at?:"".split("T")[0], style = TextStyle(
+                text = noteItem?.updated_at ?: "T".split("T")[0],
+                style = TextStyle(
                     color = Color.Black.copy(alpha = 0.3f),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Normal
