@@ -41,9 +41,7 @@ fun DashboardScreen(
     baseEventListener: BaseEventListener,
     viewModel: NoteViewModel = viewModel(
         factory = NoteViewModelFactory(
-            NoteRepository(
-                BaseApiService.generate(ApiService::class.java)
-            )
+            NoteRepository(BaseApiService.generate(ApiService::class.java))
         )
     )
 ) {
@@ -84,8 +82,10 @@ fun DashboardScreen(
                 val filterList = remember { mutableStateOf(listOf<NoteResponse?>()) }.apply {
                     this.value = if (searchValue.value.isNotEmpty()) {
                         noteList.filter {
-                            it?.title?.lowercase().toString().contains(searchValue.value.lowercase()) ||
-                                    it?.description?.lowercase().toString().contains(searchValue.value.lowercase())
+                            it?.title?.lowercase().toString()
+                                .contains(searchValue.value.lowercase()) ||
+                                    it?.description?.lowercase().toString()
+                                        .contains(searchValue.value.lowercase())
                         }
                     } else {
                         noteList
