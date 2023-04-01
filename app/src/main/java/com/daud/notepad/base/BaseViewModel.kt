@@ -39,11 +39,9 @@ abstract class BaseViewModel : ViewModel() {
     private suspend fun Flow<Any?>.onCollectFlow(
         haveToCollectAll: Boolean,
         onCollectFlow: (Any?) -> Unit
-    ) {
-        when (haveToCollectAll) {
-            true -> collect { onCollectFlow.invoke(it) }
-            false -> collectLatest { onCollectFlow.invoke(it) }
-        }
+    ) = when (haveToCollectAll) {
+        true -> collect { onCollectFlow.invoke(it) }
+        false -> collectLatest { onCollectFlow.invoke(it) }
     }
 
     private fun postMessage(message: String?): String = message ?: "Something went wrong!"
