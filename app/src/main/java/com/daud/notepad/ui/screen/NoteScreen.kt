@@ -11,10 +11,10 @@ fun NoteScreen(
     navHostController: NavHostController,
     baseEventListener: BaseEventListener,
     viewModel: NoteViewModel? = null
-) { baseEventListener.onBaseEvent(
+) {
+    baseEventListener.onBaseEvent(
         baseProgressLoader = BaseProgressLoader(viewModel?.onIsLoadingState),
         onShowMessageState = viewModel?.onShowMessageState
     )
-
 
 }

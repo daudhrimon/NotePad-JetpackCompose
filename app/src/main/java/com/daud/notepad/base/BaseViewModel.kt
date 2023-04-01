@@ -19,35 +19,49 @@ abstract class BaseViewModel : ViewModel() {
 
     protected fun executeSuspendedFlow(
         operationTag: OperationTag,
+        haveToCollectAll: Boolean = false,
         suspendedFlow: suspend () -> Flow<Any?>?
     ) {
-        viewModelScope.launch() {
-            suspendedFlow()?.onStart {
-                _onShowLoadingState.value = true
-            }?.catch {
-                /*_onShowLoadingState.value = false
-                _onShowMessageState.value = it.localizedMessage ?: "Something went wrong!"*/
-                when (operationTag) {
-                    OperationTag.GetNotes -> {
-                        _onShowLoadingState.value = false
-                        onShowMessageState.value = it.localizedMessage ?: "Something went wrong!"
-                    }
-                    else -> {
-                        onSuccessCollectFlow(operationTag,"")
-                    }
+        viewModelScope.launch {
+            suspendedFlow()?.apply {
+                onStart {
+                    _onShowLoadingState.value = true
                 }
-            }?.collect {
-                _onShowLoadingState.value = false
-                when(it) {
-                    null -> onShowMessageState.value = "Something went wrong!"
-                    else -> onSuccessCollectFlow(operationTag, it)
+                catch {
+                    _onShowLoadingState.value = false
+                    //onShowMessageState.value = postMessage(it.localizedMessage)
+                    forThisApiOnlyCallingThis(operationTag, it)
+                }
+                when (haveToCollectAll) {
+                    true -> collect { onCollectFlow(operationTag, it) }
+                    false -> collectLatest { onCollectFlow(operationTag, it) }
                 }
             }
         }
     }
 
-    protected abstract fun onSuccessCollectFlow(
-        operationTag: OperationTag,
-        resultData: Any
-    )
+    private fun postMessage(message: String?): String = message ?: "Something went wrong!"
+
+    private fun onCollectFlow(operationTag: OperationTag, result: Any?) {
+        _onShowLoadingState.value = false
+        when (result) {
+            null -> onShowMessageState.value = postMessage(null)
+            else -> onSuccessCollectFlow(operationTag, result)
+        }
+    }
+
+    protected abstract fun onSuccessCollectFlow(operationTag: OperationTag, resultData: Any)
+
+
+    // this is not required
+    private fun forThisApiOnlyCallingThis(operationTag: OperationTag, throwable: Throwable) {
+        when (operationTag) {
+            OperationTag.GetNotes -> {
+                onShowMessageState.value = postMessage(throwable.localizedMessage)
+            }
+            else -> {
+                onSuccessCollectFlow(operationTag, "")
+            }
+        }
+    }
 }
