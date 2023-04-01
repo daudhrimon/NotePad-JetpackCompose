@@ -59,9 +59,7 @@ fun DashboardScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-                    navHostController.navigate(NavRoute.NoteScreen.route)
-                },
+                onClick = { navHostController.navigate(NavRoute.NoteScreen.route) },
                 backgroundColor = Red
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "", tint = Color.White)
