@@ -24,8 +24,8 @@ abstract class BaseViewModel : ViewModel() {
                 _onShowLoadingState.value = true
             }?.catch {
                 _onShowLoadingState.value = false
-                forThisApiOnlyCallingThis(operationTag, it)
                 //onShowMessageState.value = postMessage(it.localizedMessage)
+                forThisApiOnlyCallingThis(operationTag, it)
             }?.onCollectFlow(haveToCollectAll) { result: Any? ->
                 _onShowLoadingState.value = false
                 when (result) {
