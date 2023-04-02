@@ -30,7 +30,9 @@ abstract class BaseViewModel : ViewModel() {
                 _onShowLoadingState.value = false
                 when (result) {
                     null -> onShowMessageState.value = postMessage(null)
-                    else -> onCollectFlowSuccess(operationTag, result)
+                    else -> {
+                        onSucceessCollectFlow(operationTag, result)
+                    }
                 }
             }
         }
@@ -46,7 +48,7 @@ abstract class BaseViewModel : ViewModel() {
 
     private fun postMessage(message: String?): String = message ?: "Something went wrong!"
 
-    protected abstract fun onCollectFlowSuccess(operationTag: OperationTag, resultData: Any)
+    protected abstract fun onSucceessCollectFlow(operationTag: OperationTag, resultData: Any)
 
 
     // this is not required
@@ -56,7 +58,7 @@ abstract class BaseViewModel : ViewModel() {
                 onShowMessageState.value = postMessage(throwable.localizedMessage)
             }
             else -> {
-                onCollectFlowSuccess(operationTag, "")
+                onSucceessCollectFlow(operationTag, "")
             }
         }
     }

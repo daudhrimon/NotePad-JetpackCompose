@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.daud.notepad.base.BaseApiService
+import com.daud.notepad.base.network.BaseApiService
 import com.daud.notepad.base.BaseEventListener
 import com.daud.notepad.base.BaseProgressLoader
 import com.daud.notepad.data.model.NoteResponse

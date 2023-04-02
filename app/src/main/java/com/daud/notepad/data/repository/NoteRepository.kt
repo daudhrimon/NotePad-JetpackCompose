@@ -1,5 +1,6 @@
 package com.daud.notepad.data.repository
 
+import com.daud.notepad.base.network.model.GenericResponse
 import com.daud.notepad.data.model.Note
 import com.daud.notepad.data.model.NoteResponse
 import com.daud.notepad.data.network.ApiService
@@ -13,7 +14,7 @@ class NoteRepository(
     private val apiService: ApiService,
     private val ktorService: KtorService? = null
 ) {
-    suspend fun getNotes(): Flow<List<NoteResponse?>?> = flow {
+    suspend fun getNotes(): Flow<GenericResponse<List<NoteResponse?>?>> = flow {
         emit(apiService.getNotes())
     }.flowOn(Dispatchers.IO)
 

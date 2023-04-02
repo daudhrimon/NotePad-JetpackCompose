@@ -14,7 +14,7 @@ class NoteViewModel(private val repository: NoteRepository) : BaseViewModel() {
     private val _onNoteListResponse = mutableStateOf<List<NoteResponse?>?>(null)
     val onNoteListResponse: State<List<NoteResponse?>?> = _onNoteListResponse
 
-    override fun onCollectFlowSuccess(operationTag: OperationTag, resultData: Any) {
+    override fun onSucceessCollectFlow(operationTag: OperationTag, resultData: Any) {
         when (operationTag) {
             OperationTag.GetNotes -> {
                 _onNoteListResponse.value = resultData as List<NoteResponse?>?

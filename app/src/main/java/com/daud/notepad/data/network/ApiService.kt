@@ -1,5 +1,6 @@
 package com.daud.notepad.data.network
 
+import com.daud.notepad.base.network.model.GenericResponse
 import com.daud.notepad.data.model.Note
 import com.daud.notepad.data.model.NoteResponse
 import retrofit2.http.*
@@ -7,7 +8,7 @@ import retrofit2.http.*
 interface ApiService {
 
     @GET("todo/")
-    suspend fun getNotes(): List<NoteResponse?>?
+    suspend fun getNotes(): GenericResponse<List<NoteResponse?>?>
 
     @POST("todo/")
     suspend fun addNotes(
