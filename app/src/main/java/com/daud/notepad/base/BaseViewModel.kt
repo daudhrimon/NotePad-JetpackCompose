@@ -48,7 +48,7 @@ abstract class BaseViewModel : ViewModel() {
 
     private fun postMessage(message: String?): String = message ?: "Something went wrong!"
 
-    protected abstract fun onSucceessCollectFlow(operationTag: OperationTag, resultData: Any)
+    protected abstract fun onSucceessCollectFlow(operationTag: OperationTag, resultResponse: Any)
 
 
     // this is not required

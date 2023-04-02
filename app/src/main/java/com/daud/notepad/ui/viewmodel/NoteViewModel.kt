@@ -2,8 +2,6 @@ package com.daud.notepad.ui.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.daud.notepad.base.BaseViewModel
 import com.daud.notepad.data.model.Note
 import com.daud.notepad.data.model.NoteResponse
@@ -14,10 +12,10 @@ class NoteViewModel(private val repository: NoteRepository) : BaseViewModel() {
     private val _onNoteListResponse = mutableStateOf<List<NoteResponse?>?>(null)
     val onNoteListResponse: State<List<NoteResponse?>?> = _onNoteListResponse
 
-    override fun onSucceessCollectFlow(operationTag: OperationTag, resultData: Any) {
+    override fun onSucceessCollectFlow(operationTag: OperationTag, resultResponse: Any) {
         when (operationTag) {
             OperationTag.GetNotes -> {
-                _onNoteListResponse.value = resultData as List<NoteResponse?>?
+                _onNoteListResponse.value = resultResponse as List<NoteResponse?>?
             }
             OperationTag.AddNote -> {
                 attemptGetNotes()
